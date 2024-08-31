@@ -1,0 +1,56 @@
+<div class="card">
+    <div class="card-body">
+        <!-- title -->
+                <h4 class="card-title">Top Artículos Vendidos</h4>
+            
+        <!-- title -->
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th class="text-dark font-medium fs-4">Producto</th>
+                        <th class="text-dark font-medium fs-4">Estado de la Venta</th>
+                        <th class="text-dark font-medium fs-4">Estado del Inventario</th>
+                        <th class="text-dark font-medium fs-4">Total de la Venta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let ts of paginatedTopSelling'>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img [src]="ts.image" alt="product" width="45" class="rounded-circle">
+                                <div class="ms-3">
+                                    <h5 class="mb-0 font-medium">{{ts.productName}}</h5>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-{{ts.status === 'Vendido' ? 'success' : 'warning'}}">{{ts.status}}</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-{{ts.inventory === 'En Stock' ? 'primary' : 'danger'}}">{{ts.inventory}}</span>
+                        </td>
+                        <td>
+                            <h5 class="mb-0 fw-normal">{{ts.totalValueSelling}}</h5>
+                        </td>
+                    </tr>              
+                </tbody>
+            </table>
+        </div>
+
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" (click)="changePage(currentPage - 1)">Anterior</a>
+                </li>
+                <li class="page-item" *ngFor="let page of totalPagesArray" [class.active]="page === currentPage">
+                    <a class="page-link" (click)="changePage(page)">{{page}}</a>
+                </li>
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <a class="page-link" (click)="changePage(currentPage + 1)">Siguiente</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    
+</div>

@@ -1,0 +1,87 @@
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+    <div class="row">
+
+        <div class="col-md-6 mb-3">
+            <label for="title" class="form-label">Nombre del Producto:</label>
+            <input id="title" formControlName="title" class="form-control"
+                [ngClass]="{'is-invalid': productForm.get('title')?.invalid && productForm.get('title')?.touched}"
+                formControlName="title">
+            <div *ngIf="productForm.get('title')?.invalid && productForm.get('title')?.touched"
+                class="invalid-feedback">
+                Nombre del Producto es requerido.
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="categoryId" class="form-label">Categoría:</label>
+            <select id="categoryId" formControlName="categoryId" class="form-control" aria-placeholder="Seleccione una categoria">
+                <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
+            </select>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="price" class="form-label">Precio de Venta:</label>
+            <input id="price" type="number" formControlName="price" class="form-control"
+                [ngClass]="{'is-invalid': productForm.get('price')?.invalid && productForm.get('price')?.touched}"
+                formControlName="price">
+            <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched"
+                class="invalid-feedback">
+                Precio de Venta es requerido y debe ser mayor o igual a 1 y menor a 100 millones.
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="taxes" class="form-label">Impuesto %:</label>
+            <input id="taxes" type="number" formControlName="taxes" class="form-control"
+                [ngClass]="{'is-invalid': productForm.get('taxes')?.invalid && productForm.get('taxes')?.touched}"
+                formControlName="taxes">
+            <div *ngIf="productForm.get('taxes')?.invalid && productForm.get('taxes')?.touched"
+                class="invalid-feedback">
+                El valor mínimo es 0 y el máximo es 100.
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="disccount" class="form-label">Descuento %:</label>
+            <input id="disccount" type="number" formControlName="disccount" class="form-control"
+                [ngClass]="{'is-invalid': productForm.get('disccount')?.invalid && productForm.get('disccount')?.touched}"
+                formControlName="disccount">
+            <div *ngIf="productForm.get('disccount')?.invalid && productForm.get('disccount')?.touched"
+                class="invalid-feedback">
+                El valor mínimo es 0 y el máximo es 100.
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="inventory" class="form-label">Inventario:</label>
+            <input id="inventory" type="number" formControlName="inventory" class="form-control"
+                [ngClass]="{'is-invalid': productForm.get('inventory')?.invalid && productForm.get('inventory')?.touched}"
+                formControlName="inventory">
+            <div *ngIf="productForm.get('inventory')?.invalid && productForm.get('inventory')?.touched"
+                class="invalid-feedback">
+                El valor mínimo es 1.
+            </div>
+        </div>
+
+        <div class="col-12 mb-3">
+            <label for="description" class="form-label">Descripción:</label>
+            <textarea id="description" formControlName="description" class="form-control"></textarea>
+        </div>
+
+        <div class="col-md-12 mb-3">
+            <label for="image" class="form-label">Imagen:</label>
+            <input id="image" type="text" formControlName="image" class="form-control"
+                [ngClass]="{'is-invalid': productForm.get('image')?.invalid && productForm.get('image')?.touched}"
+                formControlName="image">
+            <div *ngIf="productForm.get('image')?.invalid && productForm.get('image')?.touched"
+                class="invalid-feedback">
+                Imagen es requerida.
+            </div>
+        </div>
+
+    </div>
+
+    <div class="d-flex justify-content-end">
+        <button type="submit" class="btn d-block w-25 btn-success" [disabled]="productForm.invalid">Guardar</button>
+    </div>
+</form>

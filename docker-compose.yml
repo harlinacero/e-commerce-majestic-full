@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:latest
+    container_name: e-commerce-majestic-db
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_USER: harlin
+      MYSQL_PASSWORD: 1234
+      MYSQL_DATABASE: majesticdb
+    volumes:
+      - ./e-commerce-majestic-db/mysqldata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./e-commerce-majestic-backend
+      dockerfile: Dockerfile
+    container_name: e-commerce-majestic-backend
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=harlin
+      - DB_PASSWORD=1234
+      - DB_NAME=majesticdb
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./e-commerce-majestic-front
+      dockerfile: Dockerfile
+    container_name: e-commerce-majestic-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

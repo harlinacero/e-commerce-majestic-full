@@ -1,0 +1,48 @@
+<div class="row h-100">
+    <div class="col-lg-12 h-100">
+        <div class="row h-100">
+            <div class="col col-lg-9 col-sm-12 h-100">
+                <div class="card">
+                    <div class="p-3">
+                        <h4 class="card-title mb-0">Nuestra e-commerce</h4>
+                    </div>
+                    <div class="card-body border-top">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <video
+                                src="https://media.istockphoto.com/id/1987584978/es/v%C3%ADdeo/man-dirigiendo-una-presentaci%C3%B3n-del-proyecto-para-sus-colegas-en-la-sala-de-conferencias-de.mp4?s=mp4-640x640-is&k=20&c=Y8UIdmwib3rcug6vOVSR_CAP-eIzoljOdiplDsfRDhw="
+                                class="w-100" controls autoplay muted>
+                                Tu navegador no soporta el tag de video
+                            </video>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Necessitatibus ipsum consequatur
+                            dignissimos odit minus qui doloribus, sequi quis modi quaerat sit assumenda totam similique
+                            natus provident hic in beatae magni.
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. A iusto natus quasi, veniam
+                            expedita quae sunt vel aspernatur magni voluptatum debitis, adipisci odit quisquam impedit
+                            animi velit pariatur! Rerum, ea!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col col-lg-3 col-sm-12 h-100 overflow-auto">
+                <div class="card">
+                    <div class="p-3">
+                        <h5>Videos sugeridos</h5>
+                    </div>
+                    <div class="image-list" *ngFor="let image of imageList">
+                        <div class="card card-img" style="width: 18rem;">
+                            <img class="card-img-top" src="{{image.url}}" alt="{{image.alt}}">
+                            <div class="card-body">
+                                <p class="card-text">{{image.name}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

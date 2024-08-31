@@ -1,0 +1,10 @@
+{
+    "/api": {
+      "target": "http://e-commerce-majestic-backend:3000",
+      "secure": false,
+      "changeOrigin": true,
+      "pathRewrite": {
+        "^/api": ""
+      }
+    }
+  }

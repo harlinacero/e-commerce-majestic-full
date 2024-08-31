@@ -1,0 +1,50 @@
+.max-width {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+#main-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+.navbar-brand {
+  background: #182837;  
+  .logo-icon {
+    .dark-logo {
+      height: 64px;
+    }
+  }
+}
+.left-sidebar {
+  position: fixed;
+  left: 0;
+  background-color: #343a40; 
+}
+
+.page-wrapper {
+  flex: 1;
+  margin-top: 60px; /* Same as header height */
+}
+
+.container-fluid {
+  height: calc(100vh - 60px); /* Adjust as needed */
+  overflow-y: auto;
+}
+
+.alert-fixed {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999; /* Asegúrate de que este valor sea mayor que el de otros elementos */
+  width: auto;
+  max-width: 300px;
+}

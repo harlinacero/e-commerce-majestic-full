@@ -1,0 +1,46 @@
+
+# Ignorar archivos y carpetas innecesarias en el frontend
+e-commerce-majestic-front/node_modules/
+e-commerce-majestic-front/dist/
+e-commerce-majestic-front/build/
+e-commerce-majestic-front/.env
+e-commerce-majestic-front/.cache
+e-commerce-majestic-front/.next
+e-commerce-majestic-front/.nuxt
+e-commerce-majestic-front/.angular
+
+# Ignorar archivos y carpetas innecesarias en el backend de Go
+e-commerce-majestic-backend/bin/
+e-commerce-majestic-backend/pkg/
+e-commerce-majestic-backend/vendor/
+e-commerce-majestic-backend/.env
+e-commerce-majestic-backend/.vscode
+e-commerce-majestic-backend/.idea
+
+# Ignorar archivos y carpetas de la base de datos
+e-commerce-majestic-db/mysqldata/
+e-commerce-majestic-db/*.sql
+
+# Ignorar archivos y carpetas comunes
+*.log
+*.tmp
+*.swp
+*.swo
+*.DS_Store
+*.bak
+*.backup
+*.old
+*.orig
+*.rej
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+*.iml
+
+# Ignorar archivos y carpetas de sistemas operativos
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+.Trashes

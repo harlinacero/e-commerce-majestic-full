@@ -1,0 +1,69 @@
+<div class="products">
+    <div class="row">
+        <div class="col col-title">
+            <h1 class="title">Usuarios Registrados</h1>
+        </div>
+        <div class="col col-button">
+            <button class="btn btn-primary" (click)="open()">Agregar</button>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th class="text-dark font-medium fs-4">Username</th>
+                            <th class="text-dark font-medium fs-4">Correo Electrónico</th>
+                            <th class="text-dark font-medium fs-4">Rol</th>
+                            <!-- <th class="text-dark font-medium fs-4">Precio</th> -->
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor='let ts of people' routerLinkActive="router-link-active">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img [src]="ts.avatar" alt="product" width="45"
+                                        class="rounded-circle">
+                                    <div class="ms-3">
+                                        <h5 class="mb-0 font-medium">{{ts.username}}</h5>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="">{{ts.email}}</span>
+                            </td>
+                            <td>
+                                <span class="">{{ts.role.name}}</span>
+                            </td>
+                            
+                            <td>
+                                <div class="d-flex">
+                                    <button class="btn btn-sm" (click)="open(ts)">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <button class="btn btn-sm" (click)="delete(ts)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <nav>
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" [class.disabled]="currentPage === 0">
+                        <a class="page-link" (click)="changePage(currentPage - 5)">Anterior</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" (click)="changePage(currentPage + 5)">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+</div>

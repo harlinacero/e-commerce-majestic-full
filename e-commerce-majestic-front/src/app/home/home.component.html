@@ -1,0 +1,16 @@
+<!-- <div class="row">
+    <app-banner />
+</div> -->
+
+<div class="row">
+    <div class="grid">
+        <app-card *ngFor="let product of products" [image]="product.image" [imagealt]="product.title"
+            [title]="product.title" [text]="product.price.toString()" [btnConfirmText]="'Comprar'">
+        </app-card>
+    </div>
+    <button class="btn btn-primary" (click)="getAllProducts()" [disabled]="status === 'loading'" id="btnGetAllProducts">
+        <span *ngIf="status === 'init' || status === 'success'">Cargar más</span>
+        <span *ngIf="status === 'loading'">Cargando...</span>
+        <span *ngIf="status === 'error'">Error</span>
+    </button>
+</div>
