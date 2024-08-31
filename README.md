@@ -69,28 +69,34 @@ Este proyecto es una aplicación de backend para un sistema de comercio electró
 Para ingresar a la aplicación es necesario ingresar usuario y contraseña
 
 ## Error: Usuario no encontrado
+![image](https://github.com/user-attachments/assets/39445178-4e7f-4ceb-b912-538a0aeba915)
+
  
 ## Registro de nuevo usuario
 Si el usuario no está registrado en la plataforma, puede registrarse desde el login, por defecto, se le asigna el rol de comprador.
- 
+ ![image](https://github.com/user-attachments/assets/3304a9a2-fb67-4315-abc6-0bacce5e8a35)
+![image](https://github.com/user-attachments/assets/cddc0b89-32b2-42da-a703-d4a455800328)
+
  
 ## Login correcto
- ![alt text](image.png)
+![image](https://github.com/user-attachments/assets/b3be35f8-410e-4daf-aed1-315650654340)
+
 # Módulo de Usuarios
 Contiene la lista de usuarios registrados, permite agregar, editar o eliminar usuarios.
 ## Usuarios Registrados
- 
+![image](https://github.com/user-attachments/assets/dc6834c9-16d7-4416-8915-9b21cc73db29)
+
 ## Agregar / Editar usuario
 Se pueden crear nuevos usuarios desde este módulo y se permite la edición de usuarios para modificar el nombre de usuario, avatar, correo electrónico, perfil, etc.
- 
+![image](https://github.com/user-attachments/assets/8ab083d0-2ff3-4e2e-8e6d-8d5f3923fde7)
+
 # Inventario de Productos
 Se listan los productos registrados, además se permite agregar, editar y modificar productos.
- 
+![image](https://github.com/user-attachments/assets/67e12193-75aa-4a48-b082-ebed14ba46fd)
+
 ## Agregar / Editar Productos
 Se pueden crear nuevos productos o modificar un producto existente mediante el formulario correspondiente.
- 
- 
-
+![image](https://github.com/user-attachments/assets/f60a7a57-4224-430e-b4da-d79e8bea7806)
 ## Notas
 
 - Asegúrate de que los puertos necesarios (por defecto, el puerto 3306 para MySQL) estén disponibles y no en uso por otros servicios.
