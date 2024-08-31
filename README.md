@@ -81,6 +81,18 @@ Si el usuario no está registrado en la plataforma, puede registrarse desde el l
 ## Login correcto
 ![image](https://github.com/user-attachments/assets/b3be35f8-410e-4daf-aed1-315650654340)
 
+# Seguridad mediante JWT
+Al iniciar sesión se asigna un token único que se vincula a todas las peticiones mediante http_interceptors para permitir el consumo de los servicios del backend.
+![image](https://github.com/user-attachments/assets/6f528538-1f43-45b8-b2d0-9df52cdd6bad)
+A excepción del servicio de sesión y el servicio de crear usuario, todos los demás se encuentran protegidos mediante middleware para evitar el consumo de usuarios o aplicaciones no autenticadas.
+
+En caso de que el token no exista o se encuentre vencido o incorrecto, la solicitud del servicio retornará un error y la aplicación se redireccionará a la ventana de login.
+### Token vencido o inválido:
+![image](https://github.com/user-attachments/assets/f8d0c1a7-239f-4853-b621-68a2804741c3)
+### Sin token:
+![image](https://github.com/user-attachments/assets/43d45f83-825d-4052-a72d-069701f28af7)
+
+
 # Módulo de Usuarios
 Contiene la lista de usuarios registrados, permite agregar, editar o eliminar usuarios.
 ## Usuarios Registrados
