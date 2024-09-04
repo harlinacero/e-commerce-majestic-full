@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { VideoComponent } from './video/video.component';
+import { AuthGuard } from '../helpers/auth.guard';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
 
 
 export const ComponentsRoutes: Routes = [
@@ -8,12 +10,14 @@ export const ComponentsRoutes: Routes = [
 		children: [
 			{
 				path: 'presentation',
-				component: VideoComponent
+				component: VideoComponent,
+				canActivate: [AuthGuard],
+				data: { roles: ['seller', 'shooper'] }
 			},
-			// {
-			// 	path: 'product',
-			// 	component: ProdcutComponent
-			// }
+			{
+				path: 'forbidden',
+				component: ForbiddenComponent
+			}
 		]
-	}
+	},
 ];

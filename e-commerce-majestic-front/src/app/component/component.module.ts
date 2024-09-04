@@ -9,6 +9,7 @@ import { VideoComponent } from './video/video.component';
 import { ModalComponent } from './modal/modal.component';
 import { AlertComponent } from './alert/alert.component';
 import { ToastComponent } from './toast/toast.component';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { ToastComponent } from './toast/toast.component';
     VideoComponent
   ],
   declarations: [
-    ModalComponent
+    ModalComponent,
+    ForbiddenComponent
   ],
   exports: [
     ModalComponent

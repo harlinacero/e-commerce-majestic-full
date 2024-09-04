@@ -45,7 +45,8 @@ func getUserByCredentials(rw http.ResponseWriter, r *http.Request) (models.User,
 		return user, nil
 	}
 
-	if err := db.Database().Where("username = ?", credentials.Username).First(&user); err.Error != nil {
+	if err :=db.Database().Preload("Role").Where("username = ?", credentials.Username).First(&user); err.Error != nil {
+	// if err := db.Database().Where("username = ?", credentials.Username).First(&user); err.Error != nil {
 		http.Error(rw, "Usuario no encontrado", http.StatusBadRequest)
 		return user, err
 	}
@@ -66,6 +67,7 @@ func generateJWT(user models.User) (string, error) {
 		"email":    user.Email,
 		"exp":      time.Now().Add(time.Hour * 24).Unix(),
 		"avatar":   user.Avatar,
+		"rolename": user.Role.Name,		
 	})
 
 	tokenString, err := token.SignedString(jwtKey)
