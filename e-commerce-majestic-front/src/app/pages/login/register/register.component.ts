@@ -51,7 +51,7 @@ export class RegisterComponent implements OnInit {
   onSubmit(): void {
     if (this.userForm.valid) {
       const newUser: User = this.userForm.value;
-      newUser.roleId = 2;
+      newUser.roleId = 3;
       this.userService.CreateUser(newUser).subscribe({
         next: (data) => {
           this.login();

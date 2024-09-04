@@ -8,7 +8,8 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-house-door-fill',
     class: '',
     extralink: false,
-    submenu: []
+    submenu: [],
+    roles: ["admin", "seller", "shooper"]
   },
   {
     path: '/dashboard',
@@ -16,7 +17,8 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-speedometer2',
     class: '',
     extralink: false,
-    submenu: []
+    submenu: [],
+    roles: ["admin"]
   },
   {
     path: '/component/presentation',
@@ -24,7 +26,8 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-play-btn-fill',
     class: '',
     extralink: false,
-    submenu: []
+    submenu: [],
+    roles: ["seller", "shooper"]
   },
   {
     path: '/products',
@@ -32,7 +35,8 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-patch-check',
     class: '',
     extralink: false,
-    submenu: []
+    submenu: [],
+    roles: ["admin", "seller"]
   },
   {
     path: '/people',
@@ -40,6 +44,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-people-fill',
     class: '',
     extralink: false,
-    submenu: []
+    submenu: [],
+    roles: ["admin"]
   }
 ];
