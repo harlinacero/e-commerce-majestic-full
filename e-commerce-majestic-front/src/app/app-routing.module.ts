@@ -2,7 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { FullComponent } from './layouts/full/full.component';
-import { authGuard } from './helpers/auth.guard';
+import { AuthGuard } from './helpers/auth.guard';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/login/register/register.component';
 
@@ -14,33 +14,37 @@ export const Approutes: Routes = [
       { path: '', redirectTo: '/home', pathMatch: 'full' },
       {
         path: 'home',
-        canActivate: [authGuard],
-        loadChildren: () => import('./home/home.component').then(m => m.HomeModule)
+        canActivate: [AuthGuard],
+        loadChildren: () => import('./home/home.component').then(m => m.HomeModule),
+        data: { roles: ['admin', 'seller', 'shooper'] }
       },
       {
         path: 'dashboard',
-        canActivate: [authGuard],
-        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
+        canActivate: [AuthGuard],
+        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
+        data: { roles: ['admin'] }
       },  
       {
         path: 'products',
-        canActivate: [authGuard],
-        loadChildren: () => import('./pages/products/products.module').then(m => m.ProductsModule)
+        canActivate: [AuthGuard],
+        loadChildren: () => import('./pages/products/products.module').then(m => m.ProductsModule),
+        data: { roles: ['admin', 'seller'] }
       },
       {
         path: 'people',
-        canActivate: [authGuard],
-        loadChildren: () => import('./pages/people/people.module').then(m => m.PeopleModule)
+        canActivate: [AuthGuard],
+        loadChildren: () => import('./pages/people/people.module').then(m => m.PeopleModule),
+        data: { roles: ['admin'] }
       },  
       {
         path: 'about',
-        canActivate: [authGuard],
+        canActivate: [AuthGuard],
         loadChildren: () => import('./about/about.module').then(m => m.AboutModule)
       },
       {
         path: 'component',
-        canActivate: [authGuard],
-        loadChildren: () => import('./component/component.module').then(m => m.ComponentsModule)
+        loadChildren: () => import('./component/component.module').then(m => m.ComponentsModule),
+        
       },
       {
         path: 'login',
