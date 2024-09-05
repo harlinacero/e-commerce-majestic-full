@@ -10,6 +10,8 @@ import { ModalComponent } from './modal/modal.component';
 import { AlertComponent } from './alert/alert.component';
 import { ToastComponent } from './toast/toast.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { ChatbotComponent } from './chatbot/chatbot.component';
+import { FloatingChatComponent } from './floating-chat/floating-chat.component';
 
 @NgModule({
   imports: [
@@ -22,10 +24,13 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
   ],
   declarations: [
     ModalComponent,
-    ForbiddenComponent
+    ForbiddenComponent,
+    ChatbotComponent,
+    FloatingChatComponent
   ],
   exports: [
-    ModalComponent
+    ModalComponent, 
+    FloatingChatComponent
   ]
 })
 export class ComponentsModule { }

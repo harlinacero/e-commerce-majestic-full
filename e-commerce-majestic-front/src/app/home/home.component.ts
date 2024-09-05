@@ -10,6 +10,7 @@ import { ProductService } from '../services/product.service';
 import { Product } from '../models/product.model';
 import { BannerModule } from '../component/banner/banner.component';
 import { PipesModule } from '../pipes/pipes.module';
+import { ComponentsModule } from '../component/component.module';
 
 @Component({
   selector: 'app-home',

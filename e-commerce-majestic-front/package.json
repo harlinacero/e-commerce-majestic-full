@@ -25,6 +25,7 @@
     "apexcharts": "^3.40.0",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.5",
+    "js-base64": "^3.7.7",
     "jwt-decode": "^4.0.0",
     "ng-apexcharts": "^1.7.6",
     "rxjs": "~7.8.0",

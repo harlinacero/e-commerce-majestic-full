@@ -22,6 +22,7 @@ import { AppComponent } from './app.component';
 import { SpinnerComponent } from './shared/spinner.component';
 import { LoginModule } from './pages/login/login.module';
 import { HttpRequestInterceptor } from './helpers/http.interceptor';
+import { ComponentsModule } from './component/component.module';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { HttpRequestInterceptor } from './helpers/http.interceptor';
     FullComponent,
     NavigationComponent,
     SidebarComponent,
+    ComponentsModule,
   ],
   exports: [
     RouterModule

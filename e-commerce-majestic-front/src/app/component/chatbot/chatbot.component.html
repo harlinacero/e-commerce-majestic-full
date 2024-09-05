@@ -1,0 +1,13 @@
+<div class="chat-container">
+  <div class="chat-history">
+    <div *ngFor="let message of chatHistory">
+      <p>{{ message }}</p>
+    </div>
+  </div>
+  <div class="chat-input">
+    <input [(ngModel)]="userInput" placeholder="Escribe tu pregunta" (keydown.enter)="sendMessage()" />
+    <button (click)="sendMessage()" class="btn btn-success">
+      <i class="bi bi-send"></i>
+    </button>
+  </div>
+</div>

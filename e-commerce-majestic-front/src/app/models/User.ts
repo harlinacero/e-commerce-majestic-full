@@ -15,3 +15,13 @@ export interface Role {
   name: string;
   description: string;
 }
+
+export interface SessionUser {
+  username: string;
+  roleid: number;
+  email: string;
+  exp: any;
+  avatar: string;
+  rolename: string;
+  userid: string;
+}

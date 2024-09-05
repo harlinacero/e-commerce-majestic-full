@@ -1,0 +1,7 @@
+<div class="floating-chat" *ngIf="chatVisible$ | async">
+    <!-- <button (click)="toggleChat()">X</button> -->
+    <app-chatbot></app-chatbot>
+</div>
+<button class="open-chat-button" (click)="toggleChat()" *ngIf="!(chatVisible$ | async)">
+    <img src="https://cdn-icons-png.flaticon.com/512/2040/2040946.png" alt="Chat" class="chat-icon">
+</button>
