@@ -64,6 +64,9 @@ Este proyecto es una aplicación de backend para un sistema de comercio electró
     cd e-commerce-majestic-backend
     go run main.go
     ```
+5. Ingresa la API KEY de OpenAI para hacer uso del Chatbot
+En la ruta e-commerce-majestic-front/src/app/services/openai.service.ts modificar la línea 12, reemplazando 'OPENAI_API_KEY' por la API KEY de OpenAI correspondiente.
+![image](https://github.com/user-attachments/assets/2c4e02ad-8a69-4173-9ae2-e80b7ece8662)
 
 # Login
 Para ingresar a la aplicación es necesario ingresar usuario y contraseña
@@ -179,6 +182,18 @@ Se listan los productos registrados, además se permite agregar, editar y modifi
 ## Agregar / Editar Productos
 Se pueden crear nuevos productos o modificar un producto existente mediante el formulario correspondiente.
 ![image](https://github.com/user-attachments/assets/f60a7a57-4224-430e-b4da-d79e8bea7806)
+
+#Chatbot con OpenAI
+La aplicación también integra un chatbot con la API de OpenAI. Para utilziarlo basta con abrirlo en el ícono que aparece en la parte inferior derecha de la aplicación.
+![image](https://github.com/user-attachments/assets/0c654410-2778-408d-9da1-03c0ff9e9868)
+
+Este chat contiene el historial de la conversación del usuario logueado y también está disponible en la ventana de login, aunque en esta ventana no persiste el historial de la conversación.
+Si no hay interactividad durante 20 segundos, la ventana del chatbot se cierra.
+![image](https://github.com/user-attachments/assets/cd9452e9-e5fa-42cb-8b77-92d9ec5b7127)
+
+Por porblemas de seguridad en GIT, no se subió la API KEY de Open AI, esta debe ingresarse en el código después de clonar la aplicación.
+
+
 ## Notas
 
 - Asegúrate de que los puertos necesarios (por defecto, el puerto 3306 para MySQL) estén disponibles y no en uso por otros servicios.
