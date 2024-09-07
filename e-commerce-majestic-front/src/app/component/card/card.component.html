@@ -7,6 +7,8 @@
         <p class="card-text">{{text}}</p>
     </div>
     <div class="card-footer">
-        <a href="onConfirmClick()" class="btn btn-primary confirm">{{btnConfirmText}}</a>
+        <button class="btn btn-primary confirm" (click)="onConfirmClick()" >
+            {{btnConfirmText}}
+        </button>
     </div>
 </div>

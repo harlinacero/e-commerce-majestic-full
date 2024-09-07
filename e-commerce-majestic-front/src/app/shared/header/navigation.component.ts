@@ -1,27 +1,47 @@
-import { Component, AfterViewInit, EventEmitter, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, AfterViewInit, EventEmitter, Output, OnInit } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ShopingCar } from 'src/app/models/product.model';
 import { User } from 'src/app/models/User';
+import { ShopingCarService } from 'src/app/services/shoping-car-service.service';
 import { StorageService } from 'src/app/services/storage.service';
 
 
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [NgbDropdownModule],
+  imports: [NgbDropdownModule, RouterModule],
   templateUrl: './navigation.component.html'
 })
-export class NavigationComponent implements AfterViewInit {
+export class NavigationComponent implements OnInit, AfterViewInit {
   @Output() toggleSidebar = new EventEmitter<void>();
   public user!: User;
   public showSearch = false;
+  public shoppingCarItems: ShopingCar[] = [];
 
-  constructor(private storageService: StorageService, private router: Router) {
+  constructor(private storageService: StorageService, private router: Router, private shoppingCarService: ShopingCarService) {
     this.user = this.storageService.getUser();
 
     if (!this.user) {
       this.logout();
     }
+  }
+
+  ngOnInit(): void {
+    this.shoppingCarService.shoppingCar$.subscribe({
+      next: (shoppingCar) => {
+        this.shoppingCarItems = shoppingCar;
+      }
+    });
+
+    if(this.shoppingCarItems.length === 0) {
+      this.consultShoppingCar();
+    }
+  }
+
+
+  consultShoppingCar() {
+    this.shoppingCarService.getProductShoppingCar();
   }
 
   logout() {

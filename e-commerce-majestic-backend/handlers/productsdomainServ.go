@@ -9,6 +9,7 @@ import (
 	"gorm/models"
 
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/bson"
 	"gorm.io/gorm"
 )
 
@@ -100,5 +101,51 @@ func DeleteProduct(rw http.ResponseWriter, r *http.Request) {
 	} else {
 		db.Database().Delete(&product)
 		sendData(rw, product, http.StatusOK)
+	}
+}
+
+func SaveShopingCar(rw http.ResponseWriter, r *http.Request) {
+	userId, err := ResolveClaims(rw, r, "userid")
+    if err != nil {
+        sendError(rw, http.StatusUnauthorized)
+        return
+    }
+	var user int64
+	if userIdFloat, ok := userId.(float64); ok {
+        user = int64(userIdFloat)
+    } else {
+        sendError(rw, http.StatusInternalServerError)
+        return
+    }
+
+	shopingCar := []models.ShopingCar{}
+
+	decoder := json.NewDecoder(r.Body)
+
+	if err := decoder.Decode(&shopingCar); err != nil {
+		sendError(rw, http.StatusUnprocessableEntity)
+	} else {
+		for _, cart := range shopingCar {
+			cart.UserId = user
+			filter := bson.M{"userId": user, "product.id": cart.Product.Id}
+			db.UpdateDocument("shopingcar", filter, cart)			
+		}
+		sendData(rw, shopingCar, http.StatusOK)
+	}
+}
+
+func GetShopingCar(rw http.ResponseWriter, r *http.Request) {
+	userId, err := ResolveClaims(rw, r, "userid")
+	if err != nil {
+		sendError(rw, http.StatusUnauthorized)
+		return
+	}
+
+	shopingCar := []models.ShopingCar{}
+
+	if err := db.GetDocuments("shopingcar", bson.M{"userid": userId}, &shopingCar); err != nil {
+		sendError(rw, http.StatusNotFound)
+	} else {
+		sendData(rw, shopingCar, http.StatusOK)
 	}
 }

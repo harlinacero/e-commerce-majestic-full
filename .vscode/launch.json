@@ -12,7 +12,8 @@
                 "DB_PORT": "3306",
                 "DB_USER": "harlin",
                 "DB_PASSWORD": "1234",
-                "DB_NAME": "majesticdb"
+                "DB_NAME": "majesticdb",
+                "MONGODB_URI":"mongodb://localhost:27017"
             },
             "args": [],
             "showLog": true

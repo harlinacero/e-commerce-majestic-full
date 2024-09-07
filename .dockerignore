@@ -1,7 +1,29 @@
-# Ignorar archivos y carpetas innecesarias
+# Ignorar archivos y directorios específicos
 node_modules
 dist
-build
+tmp
+*.log
+*.md
+.DS_Store
+
+# Ignorar archivos de configuración específicos
 .env
+docker-compose.yml
+Dockerfile
+
+# Ignorar archivos y directorios específicos del backend
+e-commerce-majestic-backend/node_modules
+e-commerce-majestic-backend/dist
+e-commerce-majestic-backend/tmp
+e-commerce-majestic-backend/*.log
+
+# Ignorar archivos y directorios específicos del frontend
+e-commerce-majestic-front/node_modules
+e-commerce-majestic-front/dist
+e-commerce-majestic-front/tmp
+e-commerce-majestic-front/*.log
+
+# Ignorar archivos y directorios específicos de la raíz del proyecto
 .git
 .gitignore
+README.md

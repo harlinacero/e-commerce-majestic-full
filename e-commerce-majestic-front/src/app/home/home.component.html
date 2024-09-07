@@ -5,7 +5,8 @@
 <div class="row">
     <div class="grid">
         <app-card *ngFor="let product of products" [image]="product.image" [imagealt]="product.title"
-            [title]="product.title" [text]="product.price.toString()" [btnConfirmText]="'Comprar'">
+            [title]="product.title" [text]="product.price.toString()" [btnConfirmText]="'Agregar al carrito'"
+            (cardSelected)="addShoppingCar(product)">
         </app-card>
     </div>
     <button class="btn btn-primary" (click)="getAllProducts()" [disabled]="status === 'loading'" id="btnGetAllProducts">

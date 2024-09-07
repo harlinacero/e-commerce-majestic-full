@@ -11,6 +11,8 @@ import { Product } from '../models/product.model';
 import { BannerModule } from '../component/banner/banner.component';
 import { PipesModule } from '../pipes/pipes.module';
 import { ComponentsModule } from '../component/component.module';
+import { Subject, SubjectShopingCar } from '../observer/SubjectProduct';
+import { ShopingCarService } from '../services/shoping-car-service.service';
 
 @Component({
   selector: 'app-home',
@@ -26,8 +28,8 @@ export class HomeComponent implements OnInit {
   /**
    *
    */
-  constructor(private productService: ProductService) {
-
+  constructor(private productService: ProductService, private shopingCarService: ShopingCarService) {
+    
   }
 
 
@@ -50,6 +52,10 @@ export class HomeComponent implements OnInit {
         }, 300);
       }
     });
+  }
+
+  addShoppingCar(product: Product) {
+    this.shopingCarService.addShoppingCar(product);    
   }
 
 

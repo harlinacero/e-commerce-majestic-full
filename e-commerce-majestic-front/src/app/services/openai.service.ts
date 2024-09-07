@@ -2,6 +2,7 @@ import { HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders } from '@angula
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { ChatCompletionChunk, ChatRequest } from '../models/ChatMessage';
+import { environment } from 'config';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { ChatCompletionChunk, ChatRequest } from '../models/ChatMessage';
 export class OpenaiService {
 
   private apiUrl = 'https://api.openai.com/v1/chat/completions';
-  private apiKey = 'OPENAI_API_KEY';
+  private apiKey = environment.openaiApiKey;
   private httpClient: HttpClient;
   
   constructor(httpBackend: HttpBackend) { 

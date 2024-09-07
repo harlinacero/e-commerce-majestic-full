@@ -1,0 +1,87 @@
+<div class="products"></div>
+<div class="row">
+    <div class="col col-title">
+        <h1 class="title">Carrito de compras</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col col-9">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="mb-0 fw-normal">Productos</h3>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th class="text-dark font-medium fs-4">Producto</th>
+                                <th class="text-dark font-medium fs-4">Descripción</th>
+                                <th class="text-dark font-medium fs-4">Categoría</th>
+                                <th class="text-dark font-medium fs-4">Precio Unitario</th>
+                                <th class="text-dark font-medium fs-4">Cantidad</th>
+                                <th class="text-dark font-medium fs-4">Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor='let ts of products' routerLinkActive="router-link-active">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img [src]="ts.product.image" alt="product" width="45" class="rounded-circle">
+                                        <div class="ms-3">
+                                            <h5 class="mb-0 font-medium">{{ts.product.title}}</h5>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="">{{ts.product.description}}</span>
+                                </td>
+                                <td>
+                                    <span class="">{{ts.product.category?.name}}</span>
+                                </td>
+                                <td>
+                                    <h5 class="mb-0 fw-normal">{{ts.product.price}}</h5>
+                                </td>
+                                <td>
+                                    <h5 class="mb-0 fw-normal">{{ts.quantity}}</h5>
+                                </td>
+                                <td>
+                                    <h5 class="mb-0 fw-normal">{{ts.product.price * ts.quantity}}</h5>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <button class="btn btn-sm" (click)="delete(ts)">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <h3 class="mb-0 fw-normal">Resumen de la compra</h3>                    
+                </div>
+                <div class="row">
+                    <h4>Productos: {{ products.length}}</h4>
+                </div>
+                <div class="row">
+                    <h3 class="mb-0 fw-normal">Total $ {{total}}</h3>
+                </div>
+                <div class="row">
+                    <button class="btn btn-primary" (click)="checkout()">Comprar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

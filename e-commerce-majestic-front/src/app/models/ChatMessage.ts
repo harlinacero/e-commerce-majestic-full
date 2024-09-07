@@ -1,3 +1,5 @@
+import { Time } from "@angular/common";
+
 export interface ChatRequest {
   model: string;
   messages: ChatMessage[];
@@ -34,4 +36,11 @@ export interface Settings {
   prompt_tokens: number;
   completion_tokens: number;
   total_tokens: number;
+}
+
+export interface CharObject {
+  ID: string;
+  Message: string;
+  Timestamp: Time;
+  UserId: number;
 }

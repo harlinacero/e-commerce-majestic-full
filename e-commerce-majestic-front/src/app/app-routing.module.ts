@@ -37,6 +37,12 @@ export const Approutes: Routes = [
         data: { roles: ['admin'] }
       },  
       {
+        path: 'shoppingcart',
+        canActivate: [AuthGuard],
+        loadChildren: () => import('./pages/shoppingcart/shoppingcart.module').then(m => m.ShoppingcartModule),
+        data: { roles: ['admin', 'seller', 'shooper'] }
+      },  
+      {
         path: 'about',
         canActivate: [AuthGuard],
         loadChildren: () => import('./about/about.module').then(m => m.AboutModule)

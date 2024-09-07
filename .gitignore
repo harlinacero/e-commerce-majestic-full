@@ -8,6 +8,7 @@ e-commerce-majestic-front/.cache
 e-commerce-majestic-front/.next
 e-commerce-majestic-front/.nuxt
 e-commerce-majestic-front/.angular
+e-commerce-majestic-front/package-lock.json
 
 # Ignorar archivos y carpetas innecesarias en el backend de Go
 e-commerce-majestic-backend/bin/
@@ -20,6 +21,7 @@ e-commerce-majestic-backend/.idea
 # Ignorar archivos y carpetas de la base de datos
 e-commerce-majestic-db/mysqldata/
 e-commerce-majestic-db/*.sql
+e-commerce-majestic-mongodb/data
 
 # Ignorar archivos y carpetas comunes
 *.log
@@ -45,3 +47,4 @@ $RECYCLE.BIN/
 .DS_Store
 .Trashes
 e-commerce-majestic-backend/*.exe
+e-commerce-majestic-front/config.ts

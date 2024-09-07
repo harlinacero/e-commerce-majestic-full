@@ -24,3 +24,7 @@ export interface UpdateProductDTO extends Product {
 }
 
 
+export interface ShopingCar {
+  product: Product;
+  quantity: number;
+}
