@@ -10,8 +10,6 @@ import { ProductService } from '../services/product.service';
 import { Product } from '../models/product.model';
 import { BannerModule } from '../component/banner/banner.component';
 import { PipesModule } from '../pipes/pipes.module';
-import { ComponentsModule } from '../component/component.module';
-import { Subject, SubjectShopingCar } from '../observer/SubjectProduct';
 import { ShopingCarService } from '../services/shoping-car-service.service';
 
 @Component({

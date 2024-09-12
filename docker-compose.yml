@@ -48,6 +48,9 @@ services:
     build:
       context: ./e-commerce-majestic-front
       dockerfile: Dockerfile
+      args:
+        API_URL: http://localhost:3000
+        OPENAI_API_KEY: OPENAI_API_KEY
     container_name: e-commerce-majestic-frontend
     ports:
       - "4200:80"

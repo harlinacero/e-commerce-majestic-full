@@ -4,6 +4,14 @@ FROM node:16 AS build
 # Establecer el directorio de trabajo
 WORKDIR /app
 
+# Definir argumentos de construcción
+ARG API_URL
+ARG OPENAI_API_KEY
+
+# Establecer variables de entorno
+ENV API_URL=${API_URL}
+ENV OPENAI_API_KEY=${OPENAI_API_KEY}
+
 # Copiar package.json y package-lock.json
 COPY package*.json ./
 
@@ -13,11 +21,14 @@ RUN npm install --legacy-peer-deps
 # Copiar el resto del código de la aplicación
 COPY . .
 
+# Ejecutar el script para configurar las variables de entorno
+RUN node src/assets/scripts/set-env.js
+
 # Replace environment.ts with environment.docker.ts
-RUN cp src/environments/environment.docker.ts src/environments/environment.ts
+# RUN cp src/environments/environment.docker.ts src/environments/environment.ts
 
 # Construir la aplicación Angular
-RUN npm run build --prod
+RUN npm run build
 
 # Etapa 2: Servir la aplicación
 FROM nginx:alpine

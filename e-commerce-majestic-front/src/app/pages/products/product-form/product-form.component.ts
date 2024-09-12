@@ -26,8 +26,8 @@ export class ProductFormComponent {
 
     this.productForm = this.fb.group({
       image: ['', Validators.required],
-      title: ['', [Validators.required, Validators.minLength(8)]],
-      price: [1000, [Validators.required, Validators.min(100), Validators.max(100000000)]],
+      title: ['', [Validators.required, Validators.minLength(5)]],
+      price: [10, [Validators.required, Validators.min(10), Validators.max(1000)]],
       description: [''],
       categoryId: [0, [Validators.required, Validators.min(1), Validators.max(30)]],
       taxes: [0, [Validators.min(0), Validators.max(100)]],

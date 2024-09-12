@@ -17,18 +17,25 @@ import (
  */
 func GetCategories(rw http.ResponseWriter, r *http.Request) {
 	categories := models.Categories{}
-	if err := db.Database().Find(&categories); err.Error != nil {
-		sendError(rw, http.StatusInternalServerError)
-	} else {
-		for i, v := range categories {
-			if err := db.Database().Where(&models.Product{CategoryId: v.Id}).Find(&v.Products); err.Error != nil {
-				sendError(rw, http.StatusInternalServerError)
-			} else {
-				categories[i] = v
+
+	err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+		if err := database.Find(&categories); err.Error != nil {
+			sendError(rw, http.StatusInternalServerError)
+		} else {
+			for i, v := range categories {
+				if err := database.Where(&models.Product{CategoryId: v.Id}).Find(&v.Products); err.Error != nil {
+					sendError(rw, http.StatusInternalServerError)
+				} else {
+					categories[i] = v
+				}
 			}
 		}
+		return nil
+	})
+	if err != nil {
+		sendError(rw, http.StatusInternalServerError)
 	}
-	
+
 	sendData(rw, categories, http.StatusOK)
 }
 
@@ -51,15 +58,22 @@ func getCategoryById(r *http.Request) (models.Category, *gorm.DB) {
 	categoryId, _ := strconv.Atoi(vars["id"])
 	category := models.Category{}
 
-	if err := db.Database().First(&category, categoryId); err.Error != nil {
-		return category, err
-	} else {
-		if err := db.Database().Where(&models.Product{CategoryId: category.Id}).Find(&category.Products); err.Error != nil {
-			return category, err
+	err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+		if err := database.First(&category, categoryId); err.Error != nil {
+			return err.Error
 		} else {
-			return category, nil
+			if err := database.Where(&models.Product{CategoryId: category.Id}).Find(&category.Products); err.Error != nil {
+				return err.Error
+			} else {
+				return nil
+			}
 		}
+	})
+	if err != nil {
+		return category, nil
 	}
+
+	return category, nil
 }
 
 func GetCategoryComplete(rw http.ResponseWriter, r *http.Request) {
@@ -74,18 +88,25 @@ func GetCategoryComplete(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getProductsByCategory(category models.Category) (models.ProductsByCategory, *gorm.DB) {
+func getProductsByCategory(category models.Category) (models.ProductsByCategory, error) {
 	productsByCategory := models.ProductsByCategory{
 		Category: category,
 	}
 	products := models.Products{}
 
-	if err := db.Database().Where(&models.Product{CategoryId: category.Id}).Find(&products); err.Error != nil {
+	err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+		if err := database.Where(&models.Product{CategoryId: category.Id}).Find(&products); err.Error != nil {
+			return err.Error
+		} else {
+			productsByCategory.Products = products
+			return nil
+		}
+	})
+	if err != nil {
 		return productsByCategory, err
-	} else {
-		productsByCategory.Products = products
-		return productsByCategory, nil
 	}
+
+	return productsByCategory, nil
 }
 
 /**
@@ -97,8 +118,16 @@ func CreateCategory(rw http.ResponseWriter, r *http.Request) {
 	if err := decoder.Decode(&category); err != nil {
 		sendError(rw, http.StatusUnprocessableEntity)
 	} else {
-		db.Database().Create(&category)
-		sendData(rw, category, http.StatusCreated)
+		err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+			database.Create(&category)
+			return nil
+		})
+
+		if err != nil {
+			sendError(rw, http.StatusInternalServerError)
+		} else {
+			sendData(rw, category, http.StatusCreated)
+		}
 	}
 }
 
@@ -120,7 +149,15 @@ func UpdateCategory(rw http.ResponseWriter, r *http.Request) {
 			sendError(rw, http.StatusUnprocessableEntity)
 		} else {
 			category.Id = categoryId
-			db.Database().Save(&category)
+
+			err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+				database.Save(&category)
+				return nil
+			})
+			if err != nil {
+				sendError(rw, http.StatusInternalServerError)
+			}
+
 			sendData(rw, category, http.StatusAccepted)
 		}
 
@@ -134,7 +171,14 @@ func DeleteCategory(rw http.ResponseWriter, r *http.Request) {
 	if category, err := getCategoryById(r); err != nil {
 		sendError(rw, http.StatusNotFound)
 	} else {
-		db.Database().Delete(&category)
+		err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+			database.Delete(&category)
+			return nil
+		})
+		if err != nil {
+			sendError(rw, http.StatusInternalServerError)
+		}
+
 		sendData(rw, category, http.StatusOK)
 	}
 }

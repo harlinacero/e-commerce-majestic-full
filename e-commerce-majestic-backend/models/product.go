@@ -1,6 +1,11 @@
 package models
 
-import "gorm/db"
+import (
+	"fmt"
+	"gorm/db"
+
+	"gorm.io/gorm"
+)
 
 type Product struct {
 	Id          int64   `json:"id"`
@@ -8,7 +13,7 @@ type Product struct {
 	Price       float64 `json:"price"`
 	Description string  `json:"description"`
 	Image       string  `json:"image"`
-	CategoryId  int64   `json:"category_id"`
+	CategoryId  int64   `json:"categoryId"`
 	Taxes       float64 `json:"taxes"`
 	Disccount   float64 `json:"disccount"`
 	Inventory   int64   `json:"inventory"`
@@ -19,19 +24,17 @@ type Product struct {
 type Products []Product
 
 type ShopingCar struct {
-	UserId   int64   `json:"user_id"`
-	Quantity int64   `json:"quantity"`
+	UserId   int64 `json:"user_id"`
+	Quantity int64 `json:"quantity"`
 	// ProductId int64 `json:"product_id"`
-	
-	Product  Product `json:"product" gorm:"foreignKey:ProductId;references:Id"`
+
+	Product Product `json:"product" gorm:"foreignKey:ProductId;references:Id"`
 	// User User `json:"user" gorm:"foreignKey:UserId;references:Id"`
 }
 
 type ShopingCars []ShopingCar
 
 func MigrateProduct() {
-	db.Database().AutoMigrate(Product{})
-
 	products := []Product{
 		{Title: "Shoes", Price: 50.0, Description: "Shoes", Image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuIGmNvQ-a055sivvGsNg8xy_FB2l0i5Ws2g&s", CategoryId: 1, Taxes: 0.16, Disccount: 0.0, Inventory: 100},
 		{Title: "Pants", Price: 20.0, Description: "Pants", Image: "https://w7.pngwing.com/pngs/63/280/png-transparent-jeans-denim-slim-fit-pants-bell-bottoms-jeans-blue-fashion-boy-thumbnail.png", CategoryId: 2, Taxes: 0.16, Disccount: 0.0, Inventory: 100},
@@ -60,7 +63,16 @@ func MigrateProduct() {
 		{Title: "Pantyhose", Price: 26.0, Description: "Pantyhose", Image: "https://m.media-amazon.com/images/I/51rDye26cFS._AC_SL1001_.jpg", CategoryId: 2, Taxes: 0.16, Disccount: 0.0, Inventory: 100},
 	}
 
-	for _, product := range products {
-		db.Database().FirstOrCreate(&product, product)
+	err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+		database.AutoMigrate(Product{})
+		for _, product := range products {
+			database.FirstOrCreate(&product, product)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		fmt.Printf("Error en la migración de productos: %v\n", err)
 	}
 }

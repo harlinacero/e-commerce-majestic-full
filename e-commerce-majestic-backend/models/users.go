@@ -1,9 +1,13 @@
 package models
 
 import (
+	"errors"
+	"fmt"
+
 	"gorm/db"
 
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -20,17 +24,27 @@ type User struct {
 type Users []User
 
 func MigrateUser() {
-	db.Database().AutoMigrate(User{})
+	err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+		database.AutoMigrate(User{})
 
-	// Hash the password	
-    hashedPassword, err := bcrypt.GenerateFromPassword([]byte("admin1234"), bcrypt.DefaultCost)
-    if err != nil {        
-        return
-    }
+		// Hash the password
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte("admin1234"), bcrypt.DefaultCost)
+		if err != nil {
+			return fmt.Errorf("error al hashear la contraseña: %v", err)
+		}
 
-	password := string(hashedPassword)
+		password := string(hashedPassword)
 
-	admin := User{ Id: 1, Username : "admin", Password : password, Email : "admin@gmail.com", RoleId : 1, Avatar : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzBpnouxDuF063trW5gZOyXtyuQaExCQVMYA&s"}
+		admin := User{Id: 1, Username: "admin", Password: password, Email: "admin@gmail.com", RoleId: 1, Avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzBpnouxDuF063trW5gZOyXtyuQaExCQVMYA&s"}
 
-	db.Database().FirstOrCreate(&admin, admin)
+		result := database.Where("id = ?", admin.Id).First(&admin)
+        if result.Error != nil && errors.Is(result.Error, gorm.ErrRecordNotFound) {
+            database.Create(&admin)
+        }
+
+        return nil
+	})
+	if err != nil {
+		fmt.Printf("Error en la migración del usuario: %v\n", err)
+	}
 }

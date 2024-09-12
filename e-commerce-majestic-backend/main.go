@@ -62,6 +62,7 @@ func main() {
 
 	// Sesion Service
 	mux.HandleFunc("/api/session/", handlers.GetSessionUser).Methods(http.MethodPost)
+	mux.HandleFunc("/api/healt/", handlers.Healt).Methods(http.MethodGet)
 	
 	//Aplica el middleware de CORS
 	wrappedMux := middleware.EnableCORS(mux)

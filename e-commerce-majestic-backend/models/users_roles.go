@@ -1,6 +1,11 @@
 package models
 
-import "gorm/db"
+import (
+	"fmt"
+	"gorm/db"
+
+	"gorm.io/gorm"
+)
 
 type UsersByRole struct {
 	Role Role `json:"role"`
@@ -10,5 +15,11 @@ type UsersByRole struct {
 type UsersByRoles []UsersByRole
 
 func MigrateUserByRole(){
-	db.Database().AutoMigrate(UsersByRole{})
+	err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+		database.AutoMigrate(UsersByRole{})
+		return nil
+	})
+	if err != nil {
+		fmt.Printf("Error en la migración de usuarios por roles: %v\n", err)
+	}
 }

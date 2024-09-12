@@ -2,7 +2,7 @@ import { HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders } from '@angula
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { ChatCompletionChunk, ChatRequest } from '../models/ChatMessage';
-import { environment } from 'config';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'

@@ -17,19 +17,27 @@ import (
  */
 func GetRoles(rw http.ResponseWriter, r *http.Request) {
 	roles := models.Roles{}
-	if err := db.Database().Find(&roles); err.Error != nil {
+	err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+		if err := database.Find(&roles); err.Error != nil {
+			return err.Error
+		} else {
+			for i, v := range roles {
+				if err := database.Where(&models.User{RoleId: v.Id}).Find(&v.Users); err.Error != nil {
+					return err.Error
+				} else {
+					roles[i] = v
+				}
+			}
+
+			return nil
+		}
+	})
+
+	if err != nil {
 		sendError(rw, http.StatusInternalServerError)
 	} else {
-		for i, v := range roles {
-			if err := db.Database().Where(&models.User{RoleId: v.Id}).Find(&v.Users); err.Error != nil {
-				sendError(rw, http.StatusInternalServerError)
-			} else {
-				roles[i] = v
-			}
-		}
+		sendData(rw, roles, http.StatusOK)
 	}
-
-	sendData(rw, roles, http.StatusOK)
 }
 
 /**
@@ -51,14 +59,23 @@ func getRoleById(r *http.Request) (models.Role, *gorm.DB) {
 	roleId, _ := strconv.Atoi(vars["id"])
 	role := models.Role{}
 
-	if err := db.Database().First(&role, roleId); err.Error != nil {
+	var err *gorm.DB
+	db.WithDatabaseConnection(func(database *gorm.DB) error {
+		if e := database.First(&role, roleId); e.Error != nil {
+			err = e
+		} else {
+			if e := database.Where(&models.User{RoleId: role.Id}).Find(&role.Users); e.Error != nil {
+				err = e
+			}
+		}
+
+		return nil
+	})
+
+	if err != nil {
 		return role, err
 	} else {
-		if err := db.Database().Where(&models.User{RoleId: role.Id}).Find(&role.Users); err.Error != nil {
-			return role, err
-		} else {
-			return role, nil
-		}
+		return role, nil
 	}
 }
 
@@ -80,10 +97,19 @@ func getUsersByRole(role models.Role) (models.UsersByRole, *gorm.DB) {
 	}
 	users := models.Users{}
 
-	if err := db.Database().Where(&models.User{RoleId: role.Id}).Find(&users); err.Error != nil {
+	var err *gorm.DB
+	db.WithDatabaseConnection(func(database *gorm.DB) error {
+		if e := database.Where(&models.User{RoleId: role.Id}).Find(&users); e.Error != nil {
+			err = e
+		} else {
+			usersByRole.Users = users
+		}
+		return nil
+	})
+
+	if err != nil {
 		return usersByRole, err
 	} else {
-		usersByRole.Users = users
 		return usersByRole, nil
 	}
 }
@@ -97,8 +123,16 @@ func CreateRole(rw http.ResponseWriter, r *http.Request) {
 	if err := decoder.Decode(&role); err != nil {
 		sendError(rw, http.StatusUnprocessableEntity)
 	} else {
-		db.Database().Create(&role)
-		sendData(rw, role, http.StatusCreated)
+		err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+			database.Create(&role)
+			return nil
+		})
+
+		if err != nil {
+			sendError(rw, http.StatusInternalServerError)
+		} else {
+			sendData(rw, role, http.StatusCreated)
+		}
 	}
 }
 
@@ -120,8 +154,16 @@ func UpdateRole(rw http.ResponseWriter, r *http.Request) {
 			sendError(rw, http.StatusUnprocessableEntity)
 		} else {
 			role.Id = roleId
-			db.Database().Save(&role)
-			sendData(rw, role, http.StatusAccepted)
+			err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+				database.Save(&role)
+				return nil
+			})
+
+			if err != nil {
+				sendError(rw, http.StatusInternalServerError)
+			} else {
+				sendData(rw, role, http.StatusAccepted)
+			}
 		}
 
 	}
@@ -134,7 +176,16 @@ func DeleteRole(rw http.ResponseWriter, r *http.Request) {
 	if role, err := getRoleById(r); err != nil {
 		sendError(rw, http.StatusNotFound)
 	} else {
-		db.Database().Delete(&role)
-		sendData(rw, role, http.StatusOK)
+
+		err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+			database.Delete(&role)
+			return nil
+		})
+
+		if err != nil {
+			sendError(rw, http.StatusInternalServerError)
+		} else {
+			sendData(rw, role, http.StatusOK)
+		}
 	}
 }

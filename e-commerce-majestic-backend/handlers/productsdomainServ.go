@@ -19,14 +19,19 @@ import (
 func GetProducts(rw http.ResponseWriter, r *http.Request) {
 	products := models.Products{}
 
+	err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+		if err := database.Preload("Category").Find(&products).Error; err != nil {
+			return err
+		} else {
+			return nil
+		}
+	})
 
-	if err := db.Database().Preload("Category").Find(&products).Error; err != nil {
+	if err != nil {
 		sendError(rw, http.StatusNotFound)
 	} else {
 		sendData(rw, products, http.StatusOK)
 	}
-	// db.Database().Find(&products)
-	// sendData(rw, products, http.StatusOK)
 }
 
 func GetProductsByCategory(rw http.ResponseWriter, r *http.Request) {
@@ -34,7 +39,15 @@ func GetProductsByCategory(rw http.ResponseWriter, r *http.Request) {
 	categoryId, _ := strconv.Atoi(vars["id"])
 	products := models.Products{}
 
-	if err := db.Database().Where(models.Product{CategoryId: int64(categoryId)}).Find(&products); err.Error != nil {
+	err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+		if err := database.Where(models.Product{CategoryId: int64(categoryId)}).Find(&products); err.Error != nil {
+			return err.Error
+		} else {
+			return nil
+		}
+	})
+
+	if err != nil {
 		sendError(rw, http.StatusNotFound)
 	} else {
 		sendData(rw, products, http.StatusOK)
@@ -53,7 +66,16 @@ func getProductById(r *http.Request) (models.Product, *gorm.DB) {
 	vars := mux.Vars(r)
 	productId, _ := strconv.Atoi(vars["id"])
 	product := models.Product{}
-	if err := db.Database().First(&product, productId); err.Error != nil {
+
+	var err *gorm.DB
+	db.WithDatabaseConnection(func(database *gorm.DB) error {
+		if e := database.First(&product, productId); e.Error != nil {
+			err = e
+		}
+		return nil
+	})
+
+	if err != nil {
 		return product, err
 	} else {
 		return product, nil
@@ -68,8 +90,20 @@ func CreateProduct(rw http.ResponseWriter, r *http.Request) {
 	if err := decoder.Decode(&product); err != nil {
 		sendError(rw, http.StatusUnprocessableEntity)
 	} else {
-		db.Database().Create(&product)
-		sendData(rw, product, http.StatusOK)
+		err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+			err := database.Create(&product)
+			if err.Error != nil {
+				return err.Error
+			}
+
+			return nil
+		})
+
+		if err != nil {
+			sendError(rw, http.StatusInternalServerError)
+		} else {
+			sendData(rw, product, http.StatusOK)
+		}
 	}
 }
 
@@ -89,8 +123,20 @@ func UpdateProduct(rw http.ResponseWriter, r *http.Request) {
 			sendError(rw, http.StatusUnprocessableEntity)
 		} else {
 			product.Id = productId
-			db.Database().Save(&product)
-			sendData(rw, product, http.StatusOK)
+
+			err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+				if err := database.Save(&product); err.Error != nil {
+					return err.Error
+				} else {
+					return nil
+				}
+			})
+
+			if err != nil {
+				sendError(rw, http.StatusInternalServerError)
+			} else {
+				sendData(rw, product, http.StatusOK)
+			}
 		}
 	}
 }
@@ -99,24 +145,35 @@ func DeleteProduct(rw http.ResponseWriter, r *http.Request) {
 	if product, err := getProductById(r); err != nil {
 		sendError(rw, http.StatusNotFound)
 	} else {
-		db.Database().Delete(&product)
-		sendData(rw, product, http.StatusOK)
+		err := db.WithDatabaseConnection(func(database *gorm.DB) error {
+			if err := database.Delete(&product); err.Error != nil {
+				return err.Error
+			} else {
+				return nil
+			}
+		})
+
+		if err != nil {
+			sendError(rw, http.StatusInternalServerError)
+		} else {
+			sendData(rw, product, http.StatusOK)
+		}
 	}
 }
 
 func SaveShopingCar(rw http.ResponseWriter, r *http.Request) {
 	userId, err := ResolveClaims(rw, r, "userid")
-    if err != nil {
-        sendError(rw, http.StatusUnauthorized)
-        return
-    }
+	if err != nil {
+		sendError(rw, http.StatusUnauthorized)
+		return
+	}
 	var user int64
 	if userIdFloat, ok := userId.(float64); ok {
-        user = int64(userIdFloat)
-    } else {
-        sendError(rw, http.StatusInternalServerError)
-        return
-    }
+		user = int64(userIdFloat)
+	} else {
+		sendError(rw, http.StatusInternalServerError)
+		return
+	}
 
 	shopingCar := []models.ShopingCar{}
 
@@ -128,7 +185,7 @@ func SaveShopingCar(rw http.ResponseWriter, r *http.Request) {
 		for _, cart := range shopingCar {
 			cart.UserId = user
 			filter := bson.M{"userId": user, "product.id": cart.Product.Id}
-			db.UpdateDocument("shopingcar", filter, cart)			
+			db.UpdateDocument("shopingcar", filter, cart)
 		}
 		sendData(rw, shopingCar, http.StatusOK)
 	}

@@ -9,9 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// const dsn = "root:12345@/goweb_db"
-// var dsn = "root:1234@tcp(127.0.0.1:3306)/majesticdb?charset=utf8mb4&parseTime=True&loc=Local"
-
 // Database es la conexión a la base de datos
 var Database = func() (db *gorm.DB) {
 	dbHost := os.Getenv("DB_HOST")
@@ -20,11 +17,6 @@ var Database = func() (db *gorm.DB) {
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbName := os.Getenv("DB_NAME")
 
-	// dbHost := "localhost"
-	// dbPort := "3306"
-	// dbUser := "harlin"
-	// dbPassword := "1234"
-	// dbName := "majesticdb"
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPassword, dbHost, dbPort, dbName)
 
@@ -45,4 +37,20 @@ var Database = func() (db *gorm.DB) {
 		fmt.Println("Conexión exitosa")
 		return db
 	}
+}
+
+
+func WithDatabaseConnection(operation func(*gorm.DB) error) error {
+    database := Database()
+    sqlDB, err := database.DB()
+    if err != nil {
+        return fmt.Errorf("error al obtener la conexión subyacente: %v", err)
+    }
+    defer func() {
+        if err := sqlDB.Close(); err != nil {
+            fmt.Printf("error al cerrar la conexión: %v\n", err)
+        }
+    }()
+
+    return operation(database)
 }

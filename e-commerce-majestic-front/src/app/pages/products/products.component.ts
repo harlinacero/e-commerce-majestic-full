@@ -19,7 +19,8 @@ export class ProductsComponent {
   totalPages = 0;
 
 
-  constructor(private productService: ProductService, private modalService: ModalService) {
+  constructor(private productService: ProductService, private modalService: ModalService,
+    private toastService: ToastService) {
   }
 
   ngOnInit(): void {
@@ -67,19 +68,20 @@ export class ProductsComponent {
       product: product
     };
     this.modalService.openModal(ProductFormComponent, title, data, modalOptions);
+    this.getAllProducts(this.itemsPerPage, this.currentPage);
   }
 
-  delete(product?: Product) {
-    const modalOptions = {
-      size: 'lg',
-      animation: true,
-      centered: true,
-      scrollable: true,
-      isConfirmDialog: true,
-      useTemplate: false
-    };
-
-    const title = 'Eliminar Producto';
-    this.modalService.openModal(ProductFormComponent, title, product, modalOptions);
+  delete(product: Product) {
+    this.productService.delete(product.id.toString())
+      .subscribe({
+        next: (response) => {
+          this.toastService.showSuccess('Producto eliminado');
+          this.getAllProducts(this.itemsPerPage, this.currentPage);
+        },
+        error: (error) => {
+          this.toastService.showDanger('Error al eliminar el producto');
+          console.error(error);
+        }
+      });
   }
 }
