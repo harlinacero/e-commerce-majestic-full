@@ -6,6 +6,7 @@ Este proyecto es una aplicación de backend para un sistema de comercio electró
 
 - `docker-compose.yml`: Archivo de configuración de Docker Compose para definir y ejecutar los servicios de la aplicación.
 - `e-commerce-majestic-db/mysqldata/`: Directorio para almacenar los datos de MySQL.
+- `e-commerce-majestic-mongodb/data/`: Directorio para almacenar los datos de MongoDB.
 - `e-commerce-majestic-backend/`: Directorio que contiene el código fuente de la aplicación Go.
 - `e-commerce-majestic-front/`: Directorio que contiene el código fuente de la aplicación Angular
 
@@ -13,8 +14,10 @@ Este proyecto es una aplicación de backend para un sistema de comercio electró
 
 - Docker y Docker Compose instalados en tu máquina.
 - MySQL instalado si se desea ejecutar la base de datos sin Docker.
+- MongoDB instalado si se desea ejecutar la base de datos sin Docker.
 - Go instalado si se desea ejecutar la aplicación sin Docker.
 - Angular 16 instalado si se desea ejecutar la aplicación sin docker
+- API KEY de OpenAI para utilizar el chatbot
 
 ## Ejecución con Docker
 
@@ -48,7 +51,12 @@ Este proyecto es una aplicación de backend para un sistema de comercio electró
     - Crea una base de datos llamada `majesticdb`.
     - Crea un usuario `harlin` con contraseña `1234` y dale permisos a la base de datos `majesticdb`.
 
-3. Configura las variables de entorno para la aplicación Go:
+3. Configura la base de datos MongoDb
+
+    - Instala MongoDB si no está instalado
+    - Configura la url de la conexión con MongoDB en las variables de entorno.
+
+4. Configura las variables de entorno para la aplicación Go:
 
     ```sh
     export DB_HOST=localhost
@@ -56,21 +64,73 @@ Este proyecto es una aplicación de backend para un sistema de comercio electró
     export DB_USER=harlin
     export DB_PASSWORD=1234
     export DB_NAME=majesticdb
+    export MONGODB_URI=mongodb://mongodb:27017
     ```
 
-4. Ejecuta la aplicación Go:
+5. Ejecuta la aplicación Go:
 
     ```sh
     cd e-commerce-majestic-backend
     go run main.go
     ```
-5. Ingresa la API KEY de OpenAI para hacer uso del Chatbot
+6. Ingresa la API KEY de OpenAI para hacer uso del Chatbot
 En la ruta e-commerce-majestic-front/src/environments/environment.development.ts la línea 4, reemplaza 'OPENAI_API_KEY' por la API KEY de OpenAI correspondiente.
 ![image](https://github.com/user-attachments/assets/07ac6ad3-0f00-4cd9-a752-d50beb8eb98b)
 
+7. Ejecuta la aplicación angular
+    ```sh
+    cd e-commerce-majestic-front
+    ng serve
+    ```
+7. Abrir el navegador web en http://localhost:4200, la aplicación redireccionará hacia el login. 
 
+## Ejecucuón en AWS
+
+### Requisitos:
+    - Tener una cuenta de AWS con los permisos para crear TargetGroups y Load Balancer, Servicios y Clusters.
+
+    1. Descripción del proceso de despliegue en AWS EC2.
+    
+        Para desplegar la aplicación en AWS EC2 se requiere:
+        - Crear la base de datos de MySQL desde RDS, utiliza MySQL y configura usuario y contraseña, realizar las demás configuraciones que se crean convenientes, como habilitar los accesos etc.
+
+        ![alt text](image.png)
+        - Crear una base de datos de MongoDB administrada por AWS, habilitar el acceso a cualquer IP.
+        - Crear dos Target Group desde EC2, uno para el Backend, otro para el frontend.
+        ![alt text](image-1.png)
+            -- Cada Target Group se debe configurar como IP Addresses y habilitar el puerto declarado en el contenedor docker.
+            -- Adiconalmente, configurar la VPC y el protocolo HTTP por el cual escuchará el servicio.
+        - Crear dos balanceadores de Carga, uno para el Backend, otro para el FrontEnd
+        ![alt text](image-2.png)
+            -- Cada balanceador de Carga debe configurarse como Balanceador de Aplicaciones y exponerse a internet para poder acceder desde cualquier lugar.
+            -- Se debe asignar grupos de seguridad y VPC correspondiente.
+            -- Asociar el Target Group creado para cada uno, el Target Group del backend para el load balacer del backend y así respectivamente.
+        - Desde ECR (Elastic Container Registry) , se deben cargar y registrar las imágenes de docker tanto del frontend como del backend.
+         ![alt text](image-3.png)
+            -- Para cargar las imágenes, AWS provee los comandos correspondientes que deben ejecutarse desde la pc local, donde se encuentren las imágenes.
+            -- Obtener la URI de cada Repositorio para configurarla en la última Etapa.
+        - Desde ECS (Elastic Container Service), crear Task Definition, donde se relacionará la Imagen Docker cargada en el ECR, además de las variables de entorno y otras configuraciones correspondientes al deploy.
+            ![alt text](image-5.png)
+        - Desde ECS (Elastic Container Service), crear un Cluster que contendrá los dos servicios.
+            ![alt text](image-4.png)
+            -- Dentro del mismo clúser, se pueden crear los dos servicios asociados, uno al backend y otro al frontEnd. 
+            -- En cada servicio se relacionan los Task Definition y Load Balancer creados anteriormente.
+            -- Una vez creado el servicio y dado de alta, el balanceador de carga mostrará el DNS (Domain Name Service) público, al cual se puede acceder desde la web.
+        ![alt text](image-7.png)
+        ![alt text](image-6.png)
+
+    2. Desafíos encontrados y cómo se resolvieron.
+
+        Los mayores desafíos encontrados fueron respecto a la configuración correcta de AWS para desplegar la aplicación.
+        Para resolver estos problemas, fue necesario recurrir a la documentación y la ayuda de otros compañeros.
+        Finalmente, el objetivo se logró y la aplicación pudo ser cargada correctamente en AWS.
+
+
+## Funcionamiento
 # Login
-Para ingresar a la aplicación es necesario ingresar usuario y contraseña
+Para ingresar a la aplicación es necesario ingresar usuario y contraseña, el usuario por defecto, creado con el rol de admin, tiene las credenciales:
+    -user: admin
+    -password: admin1234
 
 ## Error: Usuario no encontrado
 ![image](https://github.com/user-attachments/assets/39445178-4e7f-4ceb-b912-538a0aeba915)
