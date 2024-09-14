@@ -87,43 +87,50 @@ En la ruta e-commerce-majestic-front/src/environments/environment.development.ts
 ## Ejecucuón en AWS
 
 ### Requisitos:
-    - Tener una cuenta de AWS con los permisos para crear TargetGroups y Load Balancer, Servicios y Clusters.
+Tener una cuenta de AWS con los permisos para crear TargetGroups y Load Balancer, Servicios y Clusters.
 
-    1. Descripción del proceso de despliegue en AWS EC2.
+1. Descripción del proceso de despliegue en AWS EC2.
     
-        Para desplegar la aplicación en AWS EC2 se requiere:
-        - Crear la base de datos de MySQL desde RDS, utiliza MySQL y configura usuario y contraseña, realizar las demás configuraciones que se crean convenientes, como habilitar los accesos etc.
+Para desplegar la aplicación en AWS EC2 se requiere:
+   - Crear la base de datos de MySQL desde RDS, utiliza MySQL y configura usuario y contraseña, realizar las demás configuraciones que se crean convenientes, como habilitar los accesos etc.
+![image](https://github.com/user-attachments/assets/553747ef-d7bf-49a5-a13d-87cf9edbc9b7)
 
-        ![alt text](image.png)
-        - Crear una base de datos de MongoDB administrada por AWS, habilitar el acceso a cualquer IP.
-        - Crear dos Target Group desde EC2, uno para el Backend, otro para el frontend.
-        ![alt text](image-1.png)
-            -- Cada Target Group se debe configurar como IP Addresses y habilitar el puerto declarado en el contenedor docker.
-            -- Adiconalmente, configurar la VPC y el protocolo HTTP por el cual escuchará el servicio.
-        - Crear dos balanceadores de Carga, uno para el Backend, otro para el FrontEnd
-        ![alt text](image-2.png)
-            -- Cada balanceador de Carga debe configurarse como Balanceador de Aplicaciones y exponerse a internet para poder acceder desde cualquier lugar.
-            -- Se debe asignar grupos de seguridad y VPC correspondiente.
-            -- Asociar el Target Group creado para cada uno, el Target Group del backend para el load balacer del backend y así respectivamente.
-        - Desde ECR (Elastic Container Registry) , se deben cargar y registrar las imágenes de docker tanto del frontend como del backend.
-         ![alt text](image-3.png)
-            -- Para cargar las imágenes, AWS provee los comandos correspondientes que deben ejecutarse desde la pc local, donde se encuentren las imágenes.
-            -- Obtener la URI de cada Repositorio para configurarla en la última Etapa.
-        - Desde ECS (Elastic Container Service), crear Task Definition, donde se relacionará la Imagen Docker cargada en el ECR, además de las variables de entorno y otras configuraciones correspondientes al deploy.
-            ![alt text](image-5.png)
-        - Desde ECS (Elastic Container Service), crear un Cluster que contendrá los dos servicios.
-            ![alt text](image-4.png)
-            -- Dentro del mismo clúser, se pueden crear los dos servicios asociados, uno al backend y otro al frontEnd. 
-            -- En cada servicio se relacionan los Task Definition y Load Balancer creados anteriormente.
-            -- Una vez creado el servicio y dado de alta, el balanceador de carga mostrará el DNS (Domain Name Service) público, al cual se puede acceder desde la web.
-        ![alt text](image-7.png)
-        ![alt text](image-6.png)
+- Crear una base de datos de MongoDB administrada por AWS, habilitar el acceso a cualquer IP.
+- Crear dos Target Group desde EC2, uno para el Backend, otro para el frontend.
+![image](https://github.com/user-attachments/assets/6d54fc3f-521f-414d-9642-dd28e75be55b)
 
-    2. Desafíos encontrados y cómo se resolvieron.
+    -- Cada Target Group se debe configurar como IP Addresses y habilitar el puerto declarado en el contenedor docker.
+    -- Adiconalmente, configurar la VPC y el protocolo HTTP por el cual escuchará el servicio.
+- Crear dos balanceadores de Carga, uno para el Backend, otro para el FrontEnd
+![image](https://github.com/user-attachments/assets/ca1d3ca0-de86-4842-a5cc-afb503ea6925)
 
-        Los mayores desafíos encontrados fueron respecto a la configuración correcta de AWS para desplegar la aplicación.
-        Para resolver estos problemas, fue necesario recurrir a la documentación y la ayuda de otros compañeros.
-        Finalmente, el objetivo se logró y la aplicación pudo ser cargada correctamente en AWS.
+    -- Cada balanceador de Carga debe configurarse como Balanceador de Aplicaciones y exponerse a internet para poder acceder desde cualquier lugar.
+    -- Se debe asignar grupos de seguridad y VPC correspondiente.
+    -- Asociar el Target Group creado para cada uno, el Target Group del backend para el load balacer del backend y así respectivamente.
+- Desde ECR (Elastic Container Registry) , se deben cargar y registrar las imágenes de docker tanto del frontend como del backend.
+![image](https://github.com/user-attachments/assets/4cf6c7e4-f761-4f46-8061-bc992e13759c)
+
+    -- Para cargar las imágenes, AWS provee los comandos correspondientes que deben ejecutarse desde la pc local, donde se encuentren las imágenes.
+    -- Obtener la URI de cada Repositorio para configurarla en la última Etapa.
+- Desde ECS (Elastic Container Service), crear Task Definition, donde se relacionará la Imagen Docker cargada en el ECR, además de las variables de entorno y otras configuraciones correspondientes al deploy.
+![image](https://github.com/user-attachments/assets/8fb3d022-3dca-4b80-a648-e4d82e1989ab)
+
+- Desde ECS (Elastic Container Service), crear un Cluster que contendrá los dos servicios.
+![image](https://github.com/user-attachments/assets/3b848bab-1b2c-4436-89c5-b6065d6d7c22)
+
+    -- Dentro del mismo clúser, se pueden crear los dos servicios asociados, uno al backend y otro al frontEnd. 
+    -- En cada servicio se relacionan los Task Definition y Load Balancer creados anteriormente.
+    -- Una vez creado el servicio y dado de alta, el balanceador de carga mostrará el DNS (Domain Name Service) público, al cual se puede acceder desde la web.
+![image](https://github.com/user-attachments/assets/e4f71df2-e5e4-4375-a0cb-9df8c73c2f84)
+
+![image](https://github.com/user-attachments/assets/21695ff1-7811-4880-a5ed-8aa811dcf0a3)
+
+
+2. Desafíos encontrados y cómo se resolvieron.
+
+Los mayores desafíos encontrados fueron respecto a la configuración correcta de AWS para desplegar la aplicación.
+Para resolver estos problemas, fue necesario recurrir a la documentación y la ayuda de otros compañeros.
+Finalmente, el objetivo se logró y la aplicación pudo ser cargada correctamente en AWS.
 
 
 ## Funcionamiento
