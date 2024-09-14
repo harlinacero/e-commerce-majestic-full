@@ -65,8 +65,9 @@ Este proyecto es una aplicación de backend para un sistema de comercio electró
     go run main.go
     ```
 5. Ingresa la API KEY de OpenAI para hacer uso del Chatbot
-En la ruta e-commerce-majestic-front/src/app/services/openai.service.ts modificar la línea 12, reemplazando 'OPENAI_API_KEY' por la API KEY de OpenAI correspondiente.
-![image](https://github.com/user-attachments/assets/2c4e02ad-8a69-4173-9ae2-e80b7ece8662)
+En la ruta e-commerce-majestic-front/src/environments/environment.development.ts la línea 4, reemplaza 'OPENAI_API_KEY' por la API KEY de OpenAI correspondiente.
+![image](https://github.com/user-attachments/assets/07ac6ad3-0f00-4cd9-a752-d50beb8eb98b)
+
 
 # Login
 Para ingresar a la aplicación es necesario ingresar usuario y contraseña
